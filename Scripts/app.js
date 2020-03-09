@@ -121,6 +121,8 @@ let app;
         // Task 1 b
         $("ul").on("click", ".editButton", function () {
 
+            $('.editTextInput').show();
+            // Unsure of how to complete this function
         });
 
         // Task 1 c
