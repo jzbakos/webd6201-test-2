@@ -1,7 +1,11 @@
-class Contact
-{
-    constructor(contactName = "", emailAddress = "", contactNumber = "", contactMessage = "")
-    {
+/**
+ * Author: Josh Bakos
+ * Student ID: 100652490
+ * Date Completed: 2020-03-08
+ */
+
+class Contact {
+    constructor(contactName = "", emailAddress = "", contactNumber = "", contactMessage = "") {
         this.contactName = contactName;
         this.emailAddress = emailAddress;
         this.contactNumber = contactNumber;
@@ -17,7 +21,7 @@ class Contact
 // mean? -> anonymous self-executing function
 
 let app;
-(function(app){
+(function (app) {
 
     // Declare Function Variables here...
     console.log("%cDeclaring Variables", "color: red;")
@@ -27,32 +31,28 @@ let app;
      * Variable initialization in this function
      *
      */
-    function Start()
-    {
-       PageSwitcher();
+    function Start() {
+        PageSwitcher();
 
         Main();
     }
 
-    function PageSwitcher()
-    {
+    function PageSwitcher() {
         let name = window.location.pathname;
 
-        
+
 
         let pageName = name.substring(1, name.length - 5);
 
         // fixed bug in page switching
-        if(name == "/")
-        {
+        if (name == "/") {
             pageName = "index";
         }
-       
 
-       switch(pageName)
-        {
+
+        switch (pageName) {
             case "index":
-               DisplayHomePageContent();
+                DisplayHomePageContent();
                 break;
             case "products":
                 DisplayProductsContent();
@@ -85,73 +85,83 @@ let app;
 
     }
 
-    function DisplayHomePageContent()
-    {
+    function DisplayHomePageContent() {
         document.getElementById("home").className = "nav-item active";
 
         document.title = "WEBD6201 - Home";
 
-        let taskListButton = $("#taskListButton").click(function(){
+        let taskListButton = $("#taskListButton").click(function () {
             location.href = "./tasklist.html";
         });
     }
 
-    function DisplayTaskList()
-    {
+    function DisplayTaskList() {
         document.title = "WEBD6201 - Task List";
 
         // Task 1 a
-        $("#newTaskButton").on("click", function(){
-            
+        $("#newTaskButton").on("click", function () {
+            console.log("TEST 1");
+
+            // Get the excisting taskList ul
+            let taskList = document.getElementById('taskList');
+
+            // Create the new element you want to insert and grab the user input
+            let newElement = document.createElement('li');
+            newElement.setAttribute('id', 'task');
+            newElement.setAttribute('class', 'list-group-item');
+
+            let newElementContent = '<span id="taskText">' + $("#taskTextInput").val() + '</span> <span class="float-right"> <button class="btn btn-outline-primary btn-sm editButton"><i class="fas fa-edit"></i> <button class="btn btn-outline-danger btn-sm deleteButton" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-trash-alt"></i></button> </span> <input type="text" class="form-control edit-task editTextInput">';
+
+            newElement.innerHTML = newElementContent;
+
+            // Append the new element to the list
+            taskList.appendChild(newElement);
         });
 
         // Task 1 b
-        $("ul").on("click", ".editButton", function(){
-           
+        $("ul").on("click", ".editButton", function () {
+
         });
 
         // Task 1 c
-        $("ul").on("click", ".deleteButton", function(){
-           
+        $("ul").on("click", ".deleteButton", function (e) {
+            let element = $(e.target).closest('li');
+            
+            console.log(element);
+            $("#btnConfirm").click(function () {
+                element.remove();
+            });
         });
     }
 
-    function DisplayProductsContent()
-    {
+    function DisplayProductsContent() {
         document.title = "WEBD6201 - Products";
     }
 
-    function DisplayServicesContent()
-    {
+    function DisplayServicesContent() {
         document.title = "WEBD6201 - Services";
     }
 
-    function DisplayAboutContent()
-    {
+    function DisplayAboutContent() {
         document.title = "WEBD6201 - About Us";
     }
 
-    function DisplayContactContent()
-    {
+    function DisplayContactContent() {
         document.title = "WEBD6201 - Contact Us";
-        function clearForm()
-        {
+        function clearForm() {
             //document.getElementById("contactForm").reset();
             $("#contactForm")[0].reset();
             $("#errorMessage").hide();
         }
 
-        function validateInput(selector, condition, errorMessage)
-        {
-            if(condition)
-            {
+        function validateInput(selector, condition, errorMessage) {
+            if (condition) {
                 $("#errorMessage").show();
                 $("#errorMessage").text(errorMessage);
                 $(selector).select();
                 $(selector).css("border", "2px solid red");
             }
-            else
-            {
+            else {
                 $("#errorMessage").hide();
                 $(selector).css("border", "1px solid #ced4da");
             }
@@ -161,63 +171,53 @@ let app;
         $("#contactName").select();
 
         // Contact Name Events
-        $("#contactName").blur((e)=>
-        {
-            validateInput("#contactName",( $("#contactName").val().length < 2),"Contact Name is Too Short");
+        $("#contactName").blur((e) => {
+            validateInput("#contactName", ($("#contactName").val().length < 2), "Contact Name is Too Short");
         });
 
-        $("#contactName").focus((e)=>
-        {
+        $("#contactName").focus((e) => {
             $("#contactName").select();
         });
 
         // Email Events
-        $("#emailAddress").blur((e)=>
-        {
-            validateInput("#emailAddress",($("#emailAddress").val().length < 8) || (!$("#emailAddress").val().includes("@")),"Invalid Email Address");
+        $("#emailAddress").blur((e) => {
+            validateInput("#emailAddress", ($("#emailAddress").val().length < 8) || (!$("#emailAddress").val().includes("@")), "Invalid Email Address");
         });
 
-        $("#emailAddress").focus((e)=>
-        {
+        $("#emailAddress").focus((e) => {
             $("#emailAddress").select();
         });
 
         // Contact Number Events
-        $("#contactNumber").blur((e)=>
-        {
+        $("#contactNumber").blur((e) => {
             let phonePattern = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
             let phoneNumber = $("#contactNumber").val();
 
-            validateInput("#contactNumber",( !phonePattern.test(phoneNumber)),"Invalid Contact Number");
+            validateInput("#contactNumber", (!phonePattern.test(phoneNumber)), "Invalid Contact Number");
         });
 
-        $("#contactNumber").focus((e)=>
-        {
+        $("#contactNumber").focus((e) => {
             $("#contactNumber").select();
         });
 
         // Contact Message Events
-        $("#contactMessage").blur((e)=>
-        {
-            validateInput("#contactMessage",( $("#contactMessage").val().length < 2 ),"Contact Message Too Short");
+        $("#contactMessage").blur((e) => {
+            validateInput("#contactMessage", ($("#contactMessage").val().length < 2), "Contact Message Too Short");
         });
 
-        $("#contactMessage").focus((e)=>
-        {
+        $("#contactMessage").focus((e) => {
             $("#contactMessage").select();
         });
 
 
-        $("#contactForm").submit  ((e)=>
-        {
-            if(document.getElementById("contactForm").checkValidity() == false)
-            {
+        $("#contactForm").submit((e) => {
+            if (document.getElementById("contactForm").checkValidity() == false) {
                 e.preventDefault();
                 e.stopPropagation();
                 console.log("form not valid");
             }
 
-            
+
             let contactName = $("#contactName").val();
             let emailAddress = $("#emailAddress").val();
             let contactNumber = $("#contactNumber").val();
@@ -238,30 +238,25 @@ let app;
             clearForm();
         });
 
-        $("#resetButton").click((e)=>
-        {
+        $("#resetButton").click((e) => {
             e.preventDefault();
-            if(confirm("Are You Sure?"))
-            {
+            if (confirm("Are You Sure?")) {
                 clearForm();
             }
 
-            
+
         });
     }
 
-    function DisplayProjectsContent()
-    {
+    function DisplayProjectsContent() {
         document.title = "WEBD6201 - Projects";
     }
 
-    function DisplayLoginContent()
-    {
+    function DisplayLoginContent() {
         document.title = "WEBD6201 - Login";
 
-        $("#loginForm").submit  ((e)=>
-        {
-           
+        $("#loginForm").submit((e) => {
+
             e.preventDefault();
             e.stopPropagation();
             $("#loginForm")[0].reset();
@@ -272,8 +267,7 @@ let app;
 
     }
 
-    function DisplayRegisterContent()
-    {
+    function DisplayRegisterContent() {
         document.title = "WEBD6201 - Register";
     }
 
@@ -281,12 +275,11 @@ let app;
      * Main Program entry point is here
      *
      */
-    function Main()
-    {
-       
+    function Main() {
+
     }
-    
-    
+
+
 
     window.addEventListener("load", Start);
 })(app || (app = {}));
