@@ -125,12 +125,17 @@ let app;
 
         // Task 1 c
         $("ul").on("click", ".deleteButton", function (e) {
-            let element = $(e.target).closest('li');
-            
-            console.log(element);
-            $("#btnConfirm").click(function () {
-                element.remove();
-            });
+
+            // Get the selected li element and give it a unique id
+            let taskElement = $(this).parents()[1];
+            taskElement.setAttribute('id', 'deleteMe');
+
+            // Pop-up message to confirm deletion
+            if (confirm("Are you sure you want to delete this task?")) {
+                // Get the ul list and remove the li with unique id
+                let taskList = document.getElementById('taskList');
+                taskList.removeChild(taskElement);
+            }
         });
     }
 
